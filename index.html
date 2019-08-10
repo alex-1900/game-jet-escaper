@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
+    <meta content="telephone=no,email=no" name="format-detection" />
+    <meta name="renderer" content="webkit" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta content="yes" name="apple-touch-fullscreen" />
+    <title>雷霆战机 | Thunder Fighter</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+
+    <script src="./src/lib/es6-promise.auto.min.js"></script>
+    <script src="./src/foundations/compatibles.js"></script>
+    <script src="./src/foundations/dom.js"></script>
+    <script src="./src/foundations/frame.js"></script>
+    <script src="./src/foundations/abstruct-client.js"></script>
+    <script src="./src/foundations/app.js"></script>
+    <script src="./src/foundations/image-loader.js"></script>
+
+    <script src="./src/clients/hero-client.js"></script>
+
+</head>
+<body>
+    <div class="init-frame" id="initFrame">
+        <h1>Aircraft Battle<br />飞机大战</h1>
+        <p class="notice">加载预计花费 300KB 流量<br />你可能需要等待几分钟~</p>
+        <div class="confirm" id="confirm">
+            <button class="confirm-btn" id="loadBtn" type="button">加载游戏</button>
+            <div class="loader" id="loader">
+                <div class="content">
+                    <div class="fill" id="loaderFill"></div>
+                </div>
+            </div>
+            <button class="confirm-btn" type="button" id="startGame">开始游戏</button>
+        </div>
+    </div>
+
+    <div class="switch-frame" style="display: none" id="switchFrame">
+        <h2>选择地图</h2>
+        <div class="switch-map x-nowrap">
+            <button type="button" data="0" class="map-btn map-btn-cloud" id="map-0">云端<br />cloud</button>
+            <button type="button" data="1" class="map-btn map-btn-desert" id="map-1">沙漠<br />desert</button>
+            <button type="button" data="2" class="map-btn map-btn-ruins" id="map-2">废墟<br />ruins</button>
+            <button type="button" data="3" class="map-btn map-btn-volcano" id="map-3">火山<br />volcano</button>
+        </div>
+
+        <h2>选择战机</h2>
+        <div class="switch-map x-nowrap">
+            <button type="button" data="0" class="plane-btn plane-btn-0" id="hero-0"></button>
+            <button type="button" data="1" class="plane-btn plane-btn-1" id="hero-1"></button>
+            <button type="button" data="2" class="plane-btn plane-btn-2" id="hero-2"></button>
+            <button type="button" data="3" class="plane-btn plane-btn-3" id="hero-3"></button>
+        </div>
+
+        <div class="confirm">
+            <button class="fight" type="button" id="fight">Fight</button>
+        </div>
+    </div>
+
+    <article class="main" id="main">
+        <div class="canvases" id="domCanvasContainer">
+            <!-- Prepare canvases -->
+        </div>
+    </article>
+
+    <script src="./src/prepare-images.js"></script>
+    <script src="./src/prepare-clients.js"></script>
+    <script src="./src/process.js"></script>
+</body>
+</html>
