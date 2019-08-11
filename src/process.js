@@ -7,6 +7,10 @@
     var elementLoadBtn = document.getElementById('loadBtn');
     var elementSwitchFrame = document.getElementById('switchFrame');
     var elementFight = document.getElementById('fight');
+    var elementRocker = document.getElementById('rocker');
+    var elementHandleCtrl = document.getElementById('handle-ctrl');
+    var elementShotCtrl = document.getElementById('shot-ctrl');
+    var elementMain = document.getElementById('main');
 
 
     var neededImages = {
@@ -22,7 +26,11 @@
         img_bg_level_5: './resources/images/img_bg_level_5.jpg',
         img_init0: './resources/images/img_init0.jpg',
         img_bg_logo: './resources/images/img_bg_logo.jpg',
-        letter_peek: './resources/images/letter_peek.png'
+        letter_peek: './resources/images/letter_peek.png',
+        img_plane_ui0: './resources/images/img_plane_ui0.png',
+        img_plane_ui1: './resources/images/img_plane_ui1.png',
+        img_plane_ui2: './resources/images/img_plane_ui2.png',
+        img_plane_ui3: './resources/images/img_plane_ui3.png',
     };
     var imageLoader = new ImageLoader(neededImages);
 
@@ -35,13 +43,21 @@
         // 开始游戏
         return function (event) {
             Dom.styleRender(elementSwitchFrame, {display: 'none'});
+            Dom.styleRender(elementRocker, {display: 'block'});
             var clientWidth = document.body.clientWidth;
             var clientHeight = document.body.clientHeight;
             var app = new App(elementCanvasContainer, clientWidth, clientHeight);
-    
-            var frame = new Frame(clientWidth, clientHeight);
-            app.attachClient(heroClientBuilder(frame, images, states.heroNumber));
-            app.appendFrame(frame);
+            window.app = app;
+
+            var frameBg = new Frame(clientWidth, clientHeight);
+            app.attachClient(backgroundClientBuilder(frameBg, images, states.mapNumber));
+            app.appendFrame(frameBg);
+
+            var frameHero = new Frame(clientWidth, clientHeight);
+            var heroClient = app.attachClient(heroClientBuilder(frameHero, images, states.heroNumber));
+            app.appendFrame(frameHero);
+
+            var rocker = new Rocker(elementHandleCtrl, elementShotCtrl, heroClient);
 
             app.start();
         };
@@ -49,7 +65,7 @@
 
     // 加载完毕
     function onLoadSuccess(images) {
-        // requestFullScreen();
+        requestFullScreen();
         Dom.styleRender(elementLoader, {display: 'none'});
         Dom.styleRender(elementStartGame, {display: 'block'});
         Dom.styleRender(elementLoaderFill, {width: 0});
@@ -108,4 +124,7 @@
             states.heroNumber = selector.getAttribute('data');
         }
     });
+
+    elementRocker.ontouchstart = function(event) {event.preventDefault()};
+    elementMain.ontouchstart = function(event) {event.preventDefault()};
 })();

@@ -9,6 +9,7 @@
     <meta name="renderer" content="webkit" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta content="yes" name="apple-touch-fullscreen" />
+    <link rel="icon" href="/favicon.png" type="image/x-icon" />
     <title>雷霆战机 | Thunder Fighter</title>
     <link rel="stylesheet" type="text/css" href="./style.css" />
 
@@ -20,7 +21,11 @@
     <script src="./src/foundations/app.js"></script>
     <script src="./src/foundations/image-loader.js"></script>
 
+    <script src="./src/clients/bullet-client.js"></script>
     <script src="./src/clients/hero-client.js"></script>
+    <script src="./src/clients/background-client.js"></script>
+
+    <script src="./src/rocker.js"></script>
 
 </head>
 <body>
@@ -57,6 +62,19 @@
 
         <div class="confirm">
             <button class="fight" type="button" id="fight">Fight</button>
+        </div>
+    </div>
+
+    <div class="rocker" style="display: none" id="rocker">
+        <div class="handle float-left">
+            <div class="handle-wrap">
+                <div class="handle-ctrl" id="handle-ctrl"></div>
+            </div>
+        </div>
+        <div class="handle float-right">
+            <div class="shot-wrap">
+                <div class="shot-ctrl" id="shot-ctrl"></div>
+            </div>
         </div>
     </div>
 

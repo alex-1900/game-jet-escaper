@@ -9,7 +9,7 @@
         this.frame = frame;
         this.id = id;
         this._state = {
-            synchronized: false,
+            synchronized: true,
             timestamp: 0
         };
     }
