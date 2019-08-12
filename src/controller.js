@@ -1,10 +1,11 @@
 (function() {
     "use strict"
 
-    function rocker(handleCtrl, shotCtrl, heroClient) {
+    function controller(handleCtrl, shotCtrl, heroClient) {
         this.handleCtrl = handleCtrl;
         this.shotCtrl = shotCtrl;
         this.heroClient = heroClient;
+        this.collisionClient = app.get('CollisionClient');
 
         this.top = 25;
         this.left = 25;
@@ -12,6 +13,7 @@
             startX: 0,
             startY: 0,
             shootIntervalNumber: 0,
+            shotKey: false,
         };
 
         this.handleCtrl.ontouchstart = this.ctrlTouchStart.bind(this);
@@ -20,9 +22,10 @@
 
         this.shotCtrl.ontouchstart = this.shotStart.bind(this);
         this.shotCtrl.ontouchend = this.shotEnd.bind(this);
+        this.shotCtrl.ontouchcancel = this.shotEnd.bind(this);
     }
 
-    rocker.prototype.ctrlTouchMove = function(event) {
+    controller.prototype.ctrlTouchMove = function(event) {
         event.preventDefault();
         var finger = event.touches[0];
 
@@ -44,7 +47,7 @@
         });
     };
 
-    rocker.prototype.ctrlTouchEnd = function(event) {
+    controller.prototype.ctrlTouchEnd = function(event) {
         this.heroClient.setSpeed(0, 0);
         Dom.styleRender(this.handleCtrl, {
             top: this.top + 'px',
@@ -52,23 +55,33 @@
         });
     };
 
-    rocker.prototype.ctrlTouchStart = function(event) {
+    controller.prototype.ctrlTouchStart = function(event) {
         event.preventDefault();
         var finger = event.touches[event.touches.length - 1];
         this.state.startX = finger.clientX;
         this.state.startY = finger.clientY;
     };
 
-    rocker.prototype.shotStart = function(event) {
+    controller.prototype.shotStart = function(event) {
         event.preventDefault();
+        if (this.state.shotKey == false) {
+            this.state.shotKey = true;
+            this.collisionClient.addHeroBullet(this.heroClient.makeBullet());
+            setTimeout((function() {this.state.shotKey = false}).bind(this), 400);
+        }
         this.state.shootIntervalNumber = setInterval((function () {
-            var bullet = this.heroClient.makeBullet();
+            this.collisionClient.addHeroBullet(this.heroClient.makeBullet());
         }).bind(this), 400);
     };
 
-    rocker.prototype.shotEnd = function(event) {
+    controller.prototype.shotEnd = function(event) {
         clearInterval(this.state.shootIntervalNumber);
     };
 
-    window.Rocker = rocker;
+    function makeController(elementHandleCtrl, elementShotCtrl, heroClient) {
+        return new controller(elementHandleCtrl, elementShotCtrl, heroClient);
+    }
+
+    window.Controller = controller;
+    window.makeController = makeController;
 })();

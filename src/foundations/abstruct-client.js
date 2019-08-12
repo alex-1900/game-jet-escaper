@@ -19,7 +19,7 @@
      * client 需要实现 update 方法，以帧为单位更新状态
      */
     client.prototype.update = function(timestamp) {
-        console.log(timestamp);
+        // pass
     };
 
     /**

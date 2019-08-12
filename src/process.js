@@ -7,10 +7,11 @@
     var elementLoadBtn = document.getElementById('loadBtn');
     var elementSwitchFrame = document.getElementById('switchFrame');
     var elementFight = document.getElementById('fight');
-    var elementRocker = document.getElementById('rocker');
+    var elementController = document.getElementById('controller');
     var elementHandleCtrl = document.getElementById('handle-ctrl');
     var elementShotCtrl = document.getElementById('shot-ctrl');
     var elementMain = document.getElementById('main');
+    var elementPanel = document.getElementById('panel');
 
 
     var neededImages = {
@@ -31,6 +32,7 @@
         img_plane_ui1: './resources/images/img_plane_ui1.png',
         img_plane_ui2: './resources/images/img_plane_ui2.png',
         img_plane_ui3: './resources/images/img_plane_ui3.png',
+        img_smoke: './resources/images/img_smoke.png',
     };
     var imageLoader = new ImageLoader(neededImages);
 
@@ -43,21 +45,32 @@
         // 开始游戏
         return function (event) {
             Dom.styleRender(elementSwitchFrame, {display: 'none'});
-            Dom.styleRender(elementRocker, {display: 'block'});
+            Dom.styleRender(elementController, {display: 'block'});
+            Dom.styleRender(elementPanel, {display: 'block'});
+
             var clientWidth = document.body.clientWidth;
             var clientHeight = document.body.clientHeight;
             var app = new App(elementCanvasContainer, clientWidth, clientHeight);
+            app.set('images', images);
             window.app = app;
 
+            // background
             var frameBg = new Frame(clientWidth, clientHeight);
             app.attachClient(backgroundClientBuilder(frameBg, images, states.mapNumber));
             app.appendFrame(frameBg);
 
+            // hero
             var frameHero = new Frame(clientWidth, clientHeight);
             var heroClient = app.attachClient(heroClientBuilder(frameHero, images, states.heroNumber));
             app.appendFrame(frameHero);
 
-            var rocker = new Rocker(elementHandleCtrl, elementShotCtrl, heroClient);
+            // bullets and enemies
+            var frameEnemies = new Frame(clientWidth, clientHeight);
+            var collisionClient = app.attachClient(collisionClientBuilder(frameEnemies, heroClient));
+            app.set('CollisionClient', collisionClient);
+            app.appendFrame(frameEnemies);
+
+            makeController(elementHandleCtrl, elementShotCtrl, heroClient);
 
             app.start();
         };
@@ -65,7 +78,7 @@
 
     // 加载完毕
     function onLoadSuccess(images) {
-        requestFullScreen();
+        // requestFullScreen();
         Dom.styleRender(elementLoader, {display: 'none'});
         Dom.styleRender(elementStartGame, {display: 'block'});
         Dom.styleRender(elementLoaderFill, {width: 0});
@@ -125,6 +138,6 @@
         }
     });
 
-    elementRocker.ontouchstart = function(event) {event.preventDefault()};
+    elementController.ontouchstart = function(event) {event.preventDefault()};
     elementMain.ontouchstart = function(event) {event.preventDefault()};
 })();

@@ -6,7 +6,7 @@
         var clientWidth = document.body.clientWidth;
         var clientHeight = document.body.clientHeight;
         this.image = images['hero_' + heroNumber];
-        this.bullet0_0 = images.bullet2_0;
+        this.bullet0_0 = images.bullet1_2;
 
         this.boundaryX = clientWidth - this.image.width;
         this.boundaryY = clientHeight - this.image.height;
@@ -20,7 +20,6 @@
             prevY: y,
             speedX: 0,
             speedY: 0,
-            isShooting: false,
             currentBullet: this.bullet0_0,
         };
     }
@@ -43,11 +42,6 @@
     heroClient.prototype.render = function() {
         this.frame.clearImage(this.state.prevX, this.state.prevY, this.image);
         this.frame.drawImage(this.image, this.state.x, this.state.y);
-        if (this.state.isShooting) {
-            var bulletX = this.state.x + this.image.width / 2 - this.state.currentBullet.width / 2;
-            var bulletY = this.state.y;
-            this.frame.drawImage(this.image, bulletX, this.state.y);
-        }
     };
 
     heroClient.prototype.setSpeed = function(fixX, fixY) {
@@ -59,15 +53,20 @@
         });
     };
 
-    heroClient.prototype.setShootingState = function(isShooting) {
-        this.setState('isShooting', isShooting);
-    }
-
     heroClient.prototype.makeBullet = function() {
         var bulletX = this.state.x + this.image.width / 2 - this.state.currentBullet.width / 2;
         var bulletY = this.state.y;
         var bullet = app.attachClient(bulletClientBuilder(this.frame, this.state.currentBullet, bulletX, bulletY));
         return bullet;
+    }
+
+    heroClient.prototype.getInfo = function() {
+        return [
+            this.state.x,
+            this.state.y,
+            this.image.width,
+            this.image.height,
+        ]
     }
 
     window.HeroClient = heroClient;

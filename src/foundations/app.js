@@ -10,6 +10,7 @@
     function app(element, width, height) {
         this.width = width;
         this.height = height;
+        this.container = {};
         this.element = this._buildAppElements(element);
 
         this._process = this._process.bind(this);
@@ -24,6 +25,14 @@
             accumulator: 0
         }
     };
+
+    app.prototype.set = function (name, entry) {
+        this.container[name] = entry;
+    }
+
+    app.prototype.get = function (name) {
+        return this.container[name];
+    }
 
     /**
      * 应用程序开始运行
@@ -80,6 +89,10 @@
         this.element.appendChild(frame.canvas);
     };
 
+    app.prototype.deleteFrame = function(frame) {
+        this.element.removeChild(frame.canvas);
+    };
+
     /**
      * @private
      * 每一帧所做的操作
@@ -121,9 +134,7 @@
     };
 
     app.prototype._setState = function(key, value) {
-        console.log('prevState', this.state);
         this.state[key] = value;
-        console.log('currentState', this.state);
     };
 
     window.App = app;

@@ -21,11 +21,15 @@
     <script src="./src/foundations/app.js"></script>
     <script src="./src/foundations/image-loader.js"></script>
 
+    <script src="./src/clients/smoke-client.js"></script>
     <script src="./src/clients/bullet-client.js"></script>
     <script src="./src/clients/hero-client.js"></script>
+    <script src="./src/clients/enemy-client.js"></script>
     <script src="./src/clients/background-client.js"></script>
 
-    <script src="./src/rocker.js"></script>
+    <script src="./src/foundations/collision-client.js"></script>
+
+    <script src="./src/controller.js"></script>
 
 </head>
 <body>
@@ -65,7 +69,7 @@
         </div>
     </div>
 
-    <div class="rocker" style="display: none" id="rocker">
+    <div class="controller" style="display: none" id="controller">
         <div class="handle float-left">
             <div class="handle-wrap">
                 <div class="handle-ctrl" id="handle-ctrl"></div>
@@ -74,6 +78,27 @@
         <div class="handle float-right">
             <div class="shot-wrap">
                 <div class="shot-ctrl" id="shot-ctrl"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel" style="display: none" id="panel">
+        <div class="panel-left">
+            <div class="blood-strip">
+                <span class="blood-fill" id="bloodFill"></span>
+            </div>
+
+            <p class="bullet-font float-left">弹药：<span>20</span></p>
+
+            <div class="bullet-font float-left color-tomato">
+                击杀: <span id="killNumber">12</span>
+            </div>
+
+        </div>
+
+        <div class="panel-right">
+            <div class="distance-box">
+                <span id="distance">234</span> miles
             </div>
         </div>
     </div>
