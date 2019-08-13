@@ -23,10 +23,9 @@
             enemyBullets: {},
             goods: {},
             enemiesIntervalNumber: 0,
-            enemyBulletImage: images.bullet0_0
+            enemyBulletImage: images.bullet0_0,
+            killForGood: 0
         };
-
-        // this.makeEnemies();
     }
 
     extend(collisionClient, AbstructClient);
@@ -117,6 +116,11 @@
                     this.terminateFromState('heroBullets', id, true);
                     this.terminateFromState('enemies', n);
                     this.mixedClient.updateKillNumber(1);
+                    if (this.state.killForGood == 8) {
+                        this.state.killForGood = 0;
+                        this.makeGood();
+                    }
+                    this.state.killForGood++;
                     break;
                 }
             }

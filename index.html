@@ -37,8 +37,8 @@
 </head>
 <body>
     <div class="init-frame" id="initFrame">
-        <h1>Aircraft Battle<br />飞机大战</h1>
-        <p class="notice">加载预计花费 300KB 流量<br />你可能需要等待几分钟~</p>
+        <h1>Jet Escaper<br />末日逃亡</h1>
+        <p class="notice">加载预计消耗 1.6MB 流量<br />你可能需要等待几分钟~</p>
         <div class="confirm" id="confirm">
             <button class="confirm-btn" id="loadBtn" type="button">加载游戏</button>
             <div class="loader" id="loader">
@@ -47,6 +47,18 @@
                 </div>
             </div>
             <button class="confirm-btn" type="button" id="startGame">开始游戏</button>
+        </div>
+    </div>
+
+    <div class="introduce" style="display: none" id="introduce">
+        <p>
+            9102 年，战争席卷全球，驾驶你的飞机赶快逃亡吧！在这场空前的浩劫中，你唯一拥有的，
+            就是无尽的绝望和弹药仓里的 20 颗子弹。你将掠过云霄，穿越沙漠，纵身火海，俯瞰荒芜。
+            所以，可怜的冒险者，请用手中的子弹痛击拦截你的敌机，也请擦亮你的双眼，留意并拾取不时出现的补给包，
+            这是你赖以生存的宝贵资源。方向手柄在你的左侧，开火按钮在右侧，祝你好运。
+        </p>
+        <div class="wklmxd">
+            <button id="wklmxd" type="button">我知道了</button>
         </div>
     </div>
 
@@ -59,7 +71,7 @@
             <button type="button" data="3" class="map-btn map-btn-volcano" id="map-3">火山<br />volcano</button>
         </div>
 
-        <h2>选择战机</h2>
+        <h2>选择你的飞机</h2>
         <div class="switch-map x-nowrap">
             <button type="button" data="0" class="plane-btn plane-btn-0" id="hero-0"></button>
             <button type="button" data="1" class="plane-btn plane-btn-1" id="hero-1"></button>
@@ -101,7 +113,10 @@
 
         <div class="panel-right">
             <div class="distance-box">
-                <span id="distance">234</span> miles
+                <span id="distance">0</span> miles
+            </div>
+            <div class="distance-box time-box" id="timeBox" style="display: none">
+                <span id="timeValue">15</span> sec
             </div>
         </div>
     </div>
@@ -113,7 +128,7 @@
             <span class="record-item">击落敌机 <span id="recordKillNumber">0</span> 架</span>
         </div>
         <div class="btns">
-            <p>长按战绩卡下载图片</p>
+            <p>长按战绩卡下载图片（qq无效）</p>
             <button type="button" class="re-btn" id="replay">再来一局</button>
         </div>
     </div>

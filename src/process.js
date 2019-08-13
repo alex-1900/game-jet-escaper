@@ -12,11 +12,15 @@
     var elementShotCtrl = document.getElementById('shot-ctrl');
     var elementMain = document.getElementById('main');
     var elementPanel = document.getElementById('panel');
+    var elementIntroduce = document.getElementById('introduce');
+    var elementWklmxd = document.getElementById('wklmxd');
 
     var elementBloodFill = document.getElementById('bloodFill');
     var elementBulletNumber = document.getElementById('bulletNumber');
     var elementKillNumber = document.getElementById('killNumber');
     var elementDistance = document.getElementById('distance');
+    var elemenTimeValue = document.getElementById('timeValue');
+    var elementTimeBox = document.getElementById('timeBox');
 
     var elementShowRecord = document.getElementById('showRecord');
     var elementRecordDistance = document.getElementById('recordDistance');
@@ -44,7 +48,9 @@
         img_plane_ui2: './resources/images/img_plane_ui2.png',
         img_plane_ui3: './resources/images/img_plane_ui3.png',
         img_smoke: './resources/images/img_smoke.png',
-        img_good: './resources/images/img_good.png',
+        img_good0: './resources/images/img_good0.png',
+        img_good1: './resources/images/img_good1.png',
+        img_good2: './resources/images/img_good2.png',
     };
     var imageLoader = new ImageLoader(neededImages);
 
@@ -113,21 +119,18 @@
         };
     }
 
-    // 加载完毕
-    function onLoadSuccess(images) {
-        // requestFullScreen();
-        Dom.styleRender(elementLoader, {display: 'none'});
-        Dom.styleRender(elementStartGame, {display: 'block'});
-        Dom.styleRender(elementLoaderFill, {width: 0});
-        // 点击开始游戏按钮
-        elementStartGame.onclick = function (event) {
-            // 显示第二帧 switch
-            Dom.styleRender(elementInitFrame, {display: 'none'});
-            Dom.styleRender(elementSwitchFrame, {display: 'block'});
-        };
-
-        elementFight.onclick = startGameHanldle(images);
-    }
+    document.addEventListener('count-down', function() {
+        var sec = 15;
+        elemenTimeValue.innerText = sec--;
+        Dom.styleRender(elementTimeBox, {display: 'block'});
+        var t = setInterval(function() {
+            elemenTimeValue.innerText = sec--;
+            if (sec < 0) {
+                clearInterval(t);
+                Dom.styleRender(elementTimeBox, {display: 'none'});
+            }
+        }, 1000);
+    });
 
     // 渲染加载条
     function onResourceLoading() {
@@ -150,8 +153,13 @@
         Dom.styleRender(elementLoader, {display: 'block'});
         var promise = imageLoader.load();
         promise.then(function (_images) {
+            // 加载完毕
+            requestFullScreen();
             var images = prepareImages(_images);
-            return onLoadSuccess(images);
+            Dom.styleRender(elementLoader, {display: 'none'});
+            Dom.styleRender(elementStartGame, {display: 'block'});
+
+            elementFight.onclick = startGameHanldle(images);
         });
     };
 
@@ -201,6 +209,20 @@
             a.click();
         });
     });
+
+    // 点击开始游戏按钮
+    elementStartGame.onclick = function (event) {
+        // 显示游戏介绍
+        Dom.styleRender(elementLoader, {display: 'none'});
+        Dom.styleRender(elementIntroduce, {display: 'block'});
+    };
+
+    elementWklmxd.onclick = function() {
+        // 显示第三帧 switch
+        Dom.styleRender(elementIntroduce, {display: 'none'});
+        Dom.styleRender(elementInitFrame, {display: 'none'});
+        Dom.styleRender(elementSwitchFrame, {display: 'block'});
+    };
 
     elementController.ontouchstart = function(event) {event.preventDefault()};
     elementMain.ontouchstart = function(event) {event.preventDefault()};
