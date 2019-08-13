@@ -79,29 +79,34 @@
         this.state.startY = finger.clientY;
     };
 
+    controller.prototype.shot = function() {
+        this.collisionClient.addHeroBullet(this.heroClient.makeBullet());
+        this.mixedClient.decrBulletNumber();
+    }
+
     controller.prototype.shotStart = function(event) {
         event.preventDefault();
-        if (this.state.shotKey == false && this.mixedClient.state.bulletNumber != 0) {
-            this.collisionClient.addHeroBullet(this.heroClient.makeBullet());
-            this.mixedClient.decrBulletNumber();
+        if (
+            this.state.shotKey == false &&
+            (this.mixedClient.state.bulletNumber != 0 || this.mixedClient.state.isLimitless)
+        ) {
+            this.shot();
             this.setStates({
                 shotKey: true,
                 isShotting: true,
             });
             setTimeout((function() {this.setStates({
                 shotKey: false,
-                // isShotting: true,
             })}).bind(this), 400);
         }
-        
     };
 
     controller.prototype.blazedShoot = function() {
-        if (this.mixedClient.state.bulletNumber == 0) {
-            this.shotEnd();
+        if (this.mixedClient.state.bulletNumber != 0 ||
+            this.mixedClient.state.isLimitless) {
+            this.shot();
         } else {
-            this.collisionClient.addHeroBullet(this.heroClient.makeBullet());
-            this.mixedClient.decrBulletNumber();
+            this.shotEnd();
         }
     };
 

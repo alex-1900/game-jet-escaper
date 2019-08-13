@@ -78,6 +78,7 @@
         if (x > this.clientWidth / 2) {
             speedX = -speedX;
         }
+        type = GOOD_LIMITLESS
         var callback = this.getCallbackByType(type);
         return app.attachClient(
             goodClientBuilder(this.goodsFrame, type, x, 0, speedX, speedY, callback)
