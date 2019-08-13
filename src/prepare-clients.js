@@ -23,8 +23,26 @@ function smokeClientBuilder(frame, x, y) {
     };
 }
 
-function collisionClientBuilder(frame, heroClient) {
+function collisionClientBuilder(frame, heroClient, mixedClient) {
     return function(id) {
-        return new CollisionClient(id, frame, heroClient);
+        return new CollisionClient(id, frame, heroClient, mixedClient);
+    };
+}
+
+function mixedClientBuilder(frame, bloodFill, bulletNumber, killNumber, distance) {
+    return function(id) {
+        return new MixedClient(id, frame, bloodFill, bulletNumber, killNumber, distance);
+    };
+}
+
+function controllerClientBuilder(elementHandleCtrl, elementShotCtrl, heroClient, mixedClient) {
+    return function(id) {
+        return new Controller(id, elementHandleCtrl, elementShotCtrl, heroClient, mixedClient);
+    };
+}
+
+function goodClientBuilder(frame, type, x, y, speedX, speedY, callback) {
+    return function(id) {
+        return new GoodClient(id, frame, type, x, y, speedX, speedY, callback);
     };
 }

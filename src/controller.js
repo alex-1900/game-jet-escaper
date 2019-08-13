@@ -1,19 +1,23 @@
 (function() {
     "use strict"
 
-    function controller(handleCtrl, shotCtrl, heroClient) {
+    function controller(id, handleCtrl, shotCtrl, heroClient, mixedClient) {
+        AbstructClient.call(this, id, null);
         this.handleCtrl = handleCtrl;
         this.shotCtrl = shotCtrl;
         this.heroClient = heroClient;
+        this.mixedClient = mixedClient;
         this.collisionClient = app.get('CollisionClient');
 
         this.top = 25;
         this.left = 25;
         this.state = {
+            shootTimestamp: 0,
             startX: 0,
             startY: 0,
             shootIntervalNumber: 0,
             shotKey: false,
+            isShotting: false,
         };
 
         this.handleCtrl.ontouchstart = this.ctrlTouchStart.bind(this);
@@ -24,6 +28,19 @@
         this.shotCtrl.ontouchend = this.shotEnd.bind(this);
         this.shotCtrl.ontouchcancel = this.shotEnd.bind(this);
     }
+
+    extend(controller, AbstructClient);
+
+    controller.prototype.update = function(timestamp) {
+        if (this.state.isShotting) {
+            if (timestamp - this.state.shootTimestamp >= 400) {
+                this.state.shootTimestamp = timestamp;
+                this.blazedShoot();
+            }
+        } else {
+            this.state.shootTimestamp = timestamp;
+        }
+    };
 
     controller.prototype.ctrlTouchMove = function(event) {
         event.preventDefault();
@@ -64,24 +81,33 @@
 
     controller.prototype.shotStart = function(event) {
         event.preventDefault();
-        if (this.state.shotKey == false) {
-            this.state.shotKey = true;
+        if (this.state.shotKey == false && this.mixedClient.state.bulletNumber != 0) {
             this.collisionClient.addHeroBullet(this.heroClient.makeBullet());
-            setTimeout((function() {this.state.shotKey = false}).bind(this), 400);
+            this.mixedClient.decrBulletNumber();
+            this.setStates({
+                shotKey: true,
+                isShotting: true,
+            });
+            setTimeout((function() {this.setStates({
+                shotKey: false,
+                // isShotting: true,
+            })}).bind(this), 400);
         }
-        this.state.shootIntervalNumber = setInterval((function () {
+        
+    };
+
+    controller.prototype.blazedShoot = function() {
+        if (this.mixedClient.state.bulletNumber == 0) {
+            this.shotEnd();
+        } else {
             this.collisionClient.addHeroBullet(this.heroClient.makeBullet());
-        }).bind(this), 400);
+            this.mixedClient.decrBulletNumber();
+        }
     };
 
-    controller.prototype.shotEnd = function(event) {
-        clearInterval(this.state.shootIntervalNumber);
+    controller.prototype.shotEnd = function() {
+        this.setState('isShotting', false);
     };
-
-    function makeController(elementHandleCtrl, elementShotCtrl, heroClient) {
-        return new controller(elementHandleCtrl, elementShotCtrl, heroClient);
-    }
 
     window.Controller = controller;
-    window.makeController = makeController;
 })();

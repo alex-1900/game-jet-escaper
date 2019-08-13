@@ -14,6 +14,7 @@
     <link rel="stylesheet" type="text/css" href="./style.css" />
 
     <script src="./src/lib/es6-promise.auto.min.js"></script>
+    <script src="./src/lib/html2canvas.min.js"></script>
     <script src="./src/foundations/compatibles.js"></script>
     <script src="./src/foundations/dom.js"></script>
     <script src="./src/foundations/frame.js"></script>
@@ -26,6 +27,8 @@
     <script src="./src/clients/hero-client.js"></script>
     <script src="./src/clients/enemy-client.js"></script>
     <script src="./src/clients/background-client.js"></script>
+    <script src="./src/clients/mixed-client.js"></script>
+    <script src="./src/clients/good-client.js"></script>
 
     <script src="./src/foundations/collision-client.js"></script>
 
@@ -88,10 +91,10 @@
                 <span class="blood-fill" id="bloodFill"></span>
             </div>
 
-            <p class="bullet-font float-left">弹药：<span>20</span></p>
+            <p class="bullet-font float-left">弹药：<span id="bulletNumber">0</span></p>
 
             <div class="bullet-font float-left color-tomato">
-                击杀: <span id="killNumber">12</span>
+                击杀: <span id="killNumber">0</span>
             </div>
 
         </div>
@@ -103,11 +106,24 @@
         </div>
     </div>
 
+    <div class="show-record" style="display: none" id="showRecord">
+        <div class="record-board" id="recordBoard">
+            <h2>Aircraft Battle</h2>
+            <span class="record-item">逃亡里程 <span id="recordDistance">0</span> 英里</span>
+            <span class="record-item">击落敌机 <span id="recordKillNumber">0</span> 架</span>
+        </div>
+        <div class="btns">
+            <p>长按战绩卡下载图片</p>
+            <button type="button" class="re-btn" id="replay">再来一局</button>
+        </div>
+    </div>
+
     <article class="main" id="main">
         <div class="canvases" id="domCanvasContainer">
             <!-- Prepare canvases -->
         </div>
     </article>
+    <a href="" id="aaa" download="record-card.png"></a>
 
     <script src="./src/prepare-images.js"></script>
     <script src="./src/prepare-clients.js"></script>

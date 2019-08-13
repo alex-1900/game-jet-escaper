@@ -6,6 +6,7 @@
         this.image = image;
         this.x = x;
         this.speed = speed;
+        this.damage = 65;
 
         this.state = {
             y: y,

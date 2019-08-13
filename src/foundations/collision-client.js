@@ -1,10 +1,11 @@
 (function() {
     "use strict"
 
-    function collisionClient(id, frame, heroClient) {
+    function collisionClient(id, frame, heroClient, mixedClient) {
         AbstructClient.call(this, id, frame);
         var images = app.get('images');
         this.heroClient = heroClient;
+        this.mixedClient = mixedClient;
         this.clientWidth = document.body.clientWidth;
         this.clientHeight = document.body.clientHeight;
         this.enemyImages = [
@@ -15,14 +16,17 @@
         ];
 
         this.state = {
+            enemiesTimestamp: 0,
+            goodsTimestamp: 0,
             enemies: {},
             heroBullets: {},
             enemyBullets: {},
+            goods: {},
             enemiesIntervalNumber: 0,
             enemyBulletImage: images.bullet0_0
         };
 
-        this.makeEnemies();
+        // this.makeEnemies();
     }
 
     extend(collisionClient, AbstructClient);
@@ -37,7 +41,23 @@
             // check bullet hit
             this.checkHeros();
             this.checkEnemies();
+            this.checkGoods();
         }
+
+        if (timestamp - this.state.enemiesTimestamp >= 1500) {
+            this.makeEnemy();
+            this.state.enemiesTimestamp = timestamp;
+        }
+
+        if (timestamp - this.state.goodsTimestamp >= 20000) {
+            this.makeGood();
+            this.state.goodsTimestamp = timestamp;
+        }
+    };
+
+    collisionClient.prototype.makeGood = function() {
+        var good = this.mixedClient.makeGood();
+        this.state.goods[good.id] = good;
     };
 
     collisionClient.prototype.checkHeros = function() {
@@ -51,7 +71,33 @@
             );
             if (isCollision) {
                 this.terminateFromState('enemyBullets', id, true);
+                var blood = this.mixedClient.updateBloodFill(-bullet.damage);
+                if (blood == 0) {
+                    var customEvent = new CustomEvent('game-over', {
+                        detail: {
+                            killNumber: this.mixedClient.state.killNumber,
+                            distance: this.mixedClient.state.distance
+                        }
+                    });
+                    document.dispatchEvent(customEvent);
+                }
                 // game over logic
+            }
+        }
+    };
+
+    collisionClient.prototype.checkGoods = function() {
+        var heroInfo = this.heroClient.getInfo();
+        for (var id in this.state.goods) {
+            var good = this.state.goods[id];
+            var goodInfo = good.getInfo();
+            var isCollision = this.collisionCheck(
+                heroInfo[0], heroInfo[1], heroInfo[2], heroInfo[3],
+                goodInfo[0], goodInfo[1], goodInfo[2], goodInfo[3]
+            );
+            if (isCollision) {
+                good.trigger();
+                this.terminateFromState('goods', id);
             }
         }
     };
@@ -70,6 +116,7 @@
                 if (isCollision) {
                     this.terminateFromState('heroBullets', id, true);
                     this.terminateFromState('enemies', n);
+                    this.mixedClient.updateKillNumber(1);
                     break;
                 }
             }
@@ -118,21 +165,19 @@
         return false;
     };
 
-    collisionClient.prototype.makeEnemies = function () {
-        this.state.enemiesIntervalNumber = setInterval((function () {
-            var x = Math.floor(Math.random()*this.clientWidth);
-            var speedX = Math.floor(Math.random()*2 + 1);
-            var speedY = Math.floor(Math.random()*2 + 1);
-            if (x > this.clientWidth / 2) {
-                speedX = -speedX;
-            }
-            var imageNumber = Math.floor(Math.random() * 4);
-            var image = this.enemyImages[imageNumber];
-            var enemy = app.attachClient((function(id) {
-                return new EnemyClient(id, this.frame, image, this.state.enemyBulletImage, x, 0, speedX, speedY);
-            }).bind(this));
-            this.state.enemies[enemy.id] = enemy;
-        }).bind(this), 1500);
+    collisionClient.prototype.makeEnemy = function () {
+        var x = Math.floor(Math.random()*this.clientWidth);
+        var speedX = Math.floor(Math.random()*2 + 1);
+        var speedY = Math.floor(Math.random()*2 + 1);
+        if (x > this.clientWidth / 2) {
+            speedX = -speedX;
+        }
+        var imageNumber = Math.floor(Math.random() * 4);
+        var image = this.enemyImages[imageNumber];
+        var enemy = app.attachClient((function(id) {
+            return new EnemyClient(id, this.frame, image, this.state.enemyBulletImage, x, 0, speedX, speedY);
+        }).bind(this));
+        this.state.enemies[enemy.id] = enemy;
     };
 
     collisionClient.prototype.addHeroBullet = function(bullet) {
@@ -144,7 +189,6 @@
     };
 
     collisionClient.prototype.terminate = function() {
-        clearInterval(this.state.enemiesIntervalNumber);
         for (var id in this.state.heroBullets) {
             this.terminateFromState('heroBullets', id);
         }

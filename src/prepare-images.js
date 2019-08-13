@@ -40,7 +40,9 @@ function prepareImages(images) {
     finalImages.boom_3 = Dom.imageSplit(boom, 303, 16, 72, 64, 0.5);
     finalImages.boom_4 = Dom.imageSplit(boom, 403, 14, 77, 68, 0.5);
     finalImages.boom_5 = Dom.imageSplit(boom, 502, 18, 64, 62, 0.5);
-    
+
+    finalImages.good_0 = Dom.imageSplit(images.img_good, 0, 0, 32, 32, 0.5);;
+    finalImages.good_1 = finalImages.good_0;
 
     finalImages.bg0 = images.img_bg_level_2;
     finalImages.bg1 = images.img_bg_level_3;

@@ -10,7 +10,6 @@
     function app(element, width, height) {
         this.width = width;
         this.height = height;
-        this.container = {};
         this.element = this._buildAppElements(element);
 
         this._process = this._process.bind(this);
@@ -19,6 +18,8 @@
     app.prototype = {
         constructor: app,
         clients: {},
+        container: {},
+        frames: [],
         state: {
             isRunning: false,
             frameId: 0,
@@ -60,6 +61,12 @@
             this.clients[i].terminate();
         }
         this.clients = {};
+
+        for (var i in this.frames) {
+            // var frame = this.frames[i];
+            this.element.innerText = '';
+        }
+        this.frames = [];
     };
 
     /**
@@ -86,11 +93,8 @@
     };
 
     app.prototype.appendFrame = function(frame) {
+        this.frames.push(frame);
         this.element.appendChild(frame.canvas);
-    };
-
-    app.prototype.deleteFrame = function(frame) {
-        this.element.removeChild(frame.canvas);
     };
 
     /**

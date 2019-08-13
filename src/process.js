@@ -13,6 +13,17 @@
     var elementMain = document.getElementById('main');
     var elementPanel = document.getElementById('panel');
 
+    var elementBloodFill = document.getElementById('bloodFill');
+    var elementBulletNumber = document.getElementById('bulletNumber');
+    var elementKillNumber = document.getElementById('killNumber');
+    var elementDistance = document.getElementById('distance');
+
+    var elementShowRecord = document.getElementById('showRecord');
+    var elementRecordDistance = document.getElementById('recordDistance');
+    var elementRecordKillNumber = document.getElementById('recordKillNumber');
+    var elementRecordBoard = document.getElementById('recordBoard');
+    var elementReplay = document.getElementById('replay');
+
 
     var neededImages = {
         img_plane_main: './resources/images/img_plane_main.png',
@@ -33,12 +44,18 @@
         img_plane_ui2: './resources/images/img_plane_ui2.png',
         img_plane_ui3: './resources/images/img_plane_ui3.png',
         img_smoke: './resources/images/img_smoke.png',
+        img_good: './resources/images/img_good.png',
     };
     var imageLoader = new ImageLoader(neededImages);
 
     var states = {
         heroNumber: 0,
         mapNumber: 0,
+    }
+
+    function replayGame() {
+        Dom.styleRender(elementShowRecord, {display: 'none'});
+        Dom.styleRender(elementSwitchFrame, {display: 'block'});
     }
 
     function startGameHanldle(images) {
@@ -64,13 +81,33 @@
             var heroClient = app.attachClient(heroClientBuilder(frameHero, images, states.heroNumber));
             app.appendFrame(frameHero);
 
+            // mixed
+            var frameMixed = new Frame(clientWidth, clientHeight);
+            var mixedClient = app.attachClient(mixedClientBuilder(
+                frameMixed, elementBloodFill, elementBulletNumber, elementKillNumber, elementDistance
+            ));
+            app.appendFrame(frameMixed);
+
             // bullets and enemies
             var frameEnemies = new Frame(clientWidth, clientHeight);
-            var collisionClient = app.attachClient(collisionClientBuilder(frameEnemies, heroClient));
+            var collisionClient = app.attachClient(collisionClientBuilder(frameEnemies, heroClient, mixedClient));
             app.set('CollisionClient', collisionClient);
             app.appendFrame(frameEnemies);
 
-            makeController(elementHandleCtrl, elementShotCtrl, heroClient);
+            app.attachClient(controllerClientBuilder(
+                elementHandleCtrl, elementShotCtrl, heroClient, mixedClient
+            ));
+
+            document.addEventListener('game-over', function(event) {
+                var detail = event.detail;
+                app.stop();
+
+                Dom.styleRender(elementController, {display: 'none'});
+                Dom.styleRender(elementPanel, {display: 'none'});
+                Dom.styleRender(elementShowRecord, {display: 'block'});
+                elementRecordDistance.innerText = detail.distance;
+                elementRecordKillNumber.innerText = detail.killNumber;
+            });
 
             app.start();
         };
@@ -136,6 +173,33 @@
             Dom.styleRender(selector, {width: '120px', height: '84px'});
             states.heroNumber = selector.getAttribute('data');
         }
+    });
+
+    function longTouch(element, callback) {
+        element.ontouchstart = function(event) {
+            event.preventDefault();
+            var touching = false;
+            touching = true;
+            setTimeout(function() {
+                if (touching) {
+                    callback(event);
+                }
+            }, 1200);
+            element.ontouchend = function(event) {
+                touching = false;
+            };
+        };
+    }
+
+    elementReplay.onclick = function() {replayGame()};
+
+    longTouch(elementRecordBoard, function(event) {
+        html2canvas(elementRecordBoard).then(function(canvas) {
+            var a = document.getElementById('aaa');
+            a.href = canvas.toDataURL("image/png").replace("image/jpeg", "image/octet-stream");
+            a.download = 'record-card.png';
+            a.click();
+        });
     });
 
     elementController.ontouchstart = function(event) {event.preventDefault()};
