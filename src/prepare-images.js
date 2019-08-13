@@ -49,10 +49,8 @@ function prepareImages(images) {
     finalImages.bg1 = images.img_bg_level_3;
     finalImages.bg2 = images.img_bg_level_4;
     finalImages.bg3 = images.img_bg_level_5;
-    finalImages.smoke = images.img_smoke;
 
     finalImages.bg_logo = images.img_bg_logo;
-    finalImages.letter_peek = images.letter_peek;
 
     return finalImages;
 }
