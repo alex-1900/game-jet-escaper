@@ -112,7 +112,11 @@
                 elementRecordKillNumber.innerText = detail.killNumber;
             });
 
-            app.start();
+            try {
+                app.start();
+            } catch(e) {
+                alert(e.message);
+            }
         };
     }
 
@@ -151,7 +155,7 @@
         var promise = imageLoader.load();
         promise.then(function (_images) {
             // 加载完毕
-            requestFullScreen();
+            // requestFullScreen();
             var images = prepareImages(_images);
             Dom.styleRender(elementLoader, {display: 'none'});
             Dom.styleRender(elementStartGame, {display: 'block'});

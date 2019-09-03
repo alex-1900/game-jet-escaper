@@ -133,7 +133,7 @@
             var enemyInfo = enemy.getInfo();
             if (!this.collisionCheck(
                 enemyInfo[0], enemyInfo[1], enemyInfo[2], enemyInfo[3],
-                0, 0, this.clientWidth, this.clientHeight
+                0, -40, this.clientWidth, this.clientHeight
             )) {
                 this.terminateFromState('enemies', id);
             }
@@ -179,7 +179,7 @@
         var imageNumber = Math.floor(Math.random() * 4);
         var image = this.enemyImages[imageNumber];
         var enemy = app.attachClient((function(id) {
-            return new EnemyClient(id, this.frame, image, this.state.enemyBulletImage, x, 0, speedX, speedY);
+            return new EnemyClient(id, this.frame, image, this.state.enemyBulletImage, x, -40, speedX, speedY);
         }).bind(this));
         this.state.enemies[enemy.id] = enemy;
     };

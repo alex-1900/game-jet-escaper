@@ -129,7 +129,6 @@
     mixedClient.prototype.decrBulletNumber = function () {
         // 无限子弹时间不会减少子弹数量
         if ((!this.state.isLimitless) && this.state.bulletNumber > 0) {
-            console.log(this.state.isLimitless);
             this.state.bulletNumber -= 1;
             this.elementBulletNumber.innerText = this.state.bulletNumber;
         }

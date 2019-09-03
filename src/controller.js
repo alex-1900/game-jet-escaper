@@ -18,7 +18,6 @@
             shootIntervalNumber: 0,
             shotKey: false,
             isShotting: false,
-            fingerId: null,
         };
 
         this.handleCtrl.ontouchstart = this.ctrlTouchStart.bind(this);
@@ -43,12 +42,16 @@
         }
     };
 
-    controller.prototype.ctrlTouchMove = function(event) {
-        if (!this.state.fingerId) {
-            return;
-        }
+    controller.prototype.ctrlTouchStart = function(event) {
         event.preventDefault();
-        var finger = event.touches[this.state.fingerId];
+        var finger = event.targetTouches[0];
+        this.state.startX = finger.clientX;
+        this.state.startY = finger.clientY;
+    };
+
+    controller.prototype.ctrlTouchMove = function(event) {
+        event.preventDefault();
+        var finger = event.targetTouches[0];
 
         var fixX = finger.clientX - this.state.startX;
         var fixY = finger.clientY - this.state.startY;
@@ -70,21 +73,11 @@
 
     controller.prototype.ctrlTouchEnd = function(event) {
         event.preventDefault();
-        this.state.fingerId = null;
         this.heroClient.setSpeed(0, 0);
         Dom.styleRender(this.handleCtrl, {
             top: this.top + 'px',
             left: this.left + 'px'
         });
-    };
-
-    controller.prototype.ctrlTouchStart = function(event) {
-        event.preventDefault();
-        var finger = event.touches[event.touches.length - 1];
-        console.log(finger)
-        this.state.startX = finger.clientX;
-        this.state.startY = finger.clientY;
-        this.state.fingerId = finger.identifier;
     };
 
     controller.prototype.shot = function() {
@@ -118,8 +111,7 @@
         }
     };
 
-    controller.prototype.shotEnd = function(event) {
-        event.preventDefault();
+    controller.prototype.shotEnd = function() {
         this.setState('isShotting', false);
     };
 
