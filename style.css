@@ -424,9 +424,20 @@ body, .main, .init-frame, .switch-frame, .main .canvases {
 .introduce p {
     text-indent: 2rem;
     padding: 2rem;
+    padding-bottom: 0;
     font-size: 1.3rem;
     color: rgb(182, 222, 255);
     line-height: 35px;
+}
+.introduce p img {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    line-height: 35px;
+}
+.introduce p span {
+    float: left;
+    width: 50%;
 }
 .introduce .wklmxd {
     margin-top: 2rem;

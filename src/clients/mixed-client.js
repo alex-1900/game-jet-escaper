@@ -2,11 +2,19 @@
     "use strict"
 
     var GOOD_BULLET = 0;
-    var GOOD_SPEED = 1;
+    var GOOD_HEALTH = 1;
     var GOOD_LIMITLESS = 2;
+    var GOOD_KILLALL = 3;
 
     function mixedClient(id, frame, bloodFill, bulletNumber, killNumber, distance) {
         AbstructClient.call(this, id, frame);
+        var images = app.get('images');
+        this.enemyImages = [
+            images.enemy_0,
+            images.enemy_1,
+            images.enemy_2,
+            images.enemy_3,
+        ];
         this.elementBloodFill = bloodFill;
         this.elementBulletNumber = bulletNumber;
         this.elementKillNumber = killNumber;
@@ -29,6 +37,11 @@
             distance: 0,
             speed: this.speed,
             isLimitless: false,
+            enemies: {},
+            goods: {},
+            enemiesTimestamp: 0,
+            goodsTimestamp: 0,
+            enemyBulletImage: images.bullet0_0,
         }
 
         this.updateBloodFill(this.blood);
@@ -43,6 +56,16 @@
             this.setStates({
                 distance: this.state.distance + this.state.speed,
             });
+        }
+
+        if (timestamp - this.state.enemiesTimestamp >= 1500) {
+            this.makeEnemy();
+            this.state.enemiesTimestamp = timestamp;
+        }
+
+        if (timestamp - this.state.goodsTimestamp >= 19000) {
+            this.makeGood();
+            this.state.goodsTimestamp = timestamp;
         }
     };
 
@@ -66,12 +89,32 @@
         return this.state.blood;
     };
 
-    mixedClient.prototype.makeGood = function() {
-        var type = Math.floor(Math.random()*3);
-        if (type == GOOD_LIMITLESS) {
-            var area = this.state.isLimitless ? 2 : 3;
-            type = Math.floor(Math.random()*area);
+    mixedClient.prototype.makeEnemy = function () {
+        var x = Math.floor(Math.random()*this.clientWidth);
+        var speedX = Math.floor(Math.random()*2 + 1);
+        var speedY = Math.floor(Math.random()*2 + 1);
+        if (x > this.clientWidth / 2) {
+            speedX = -speedX;
         }
+        var imageNumber = Math.floor(Math.random() * 4);
+        var image = this.enemyImages[imageNumber];
+        var enemy = app.attachClient((function(id) {
+            return new EnemyClient(id, this.frame, image, this.state.enemyBulletImage, x, -40, speedX, speedY);
+        }).bind(this));
+        this.state.enemies[enemy.id] = enemy;
+    };
+
+    mixedClient.prototype.makeGood = function() {
+        var randomNumber = Math.floor(Math.random()*100);
+        var type = GOOD_KILLALL;
+        if (randomNumber >= 0 && randomNumber < 30) {
+            type = GOOD_HEALTH;
+        } else if (randomNumber >= 30 && randomNumber < 60) {
+            type = GOOD_BULLET;
+        } else if (randomNumber >= 60 && randomNumber < 75) {
+            type = this.state.isLimitless ? GOOD_HEALTH : GOOD_LIMITLESS;
+        }
+
         var x = Math.floor(Math.random()*this.clientWidth);
         var speedX = Math.floor(Math.random()*2 + 0.5);
         var speedY = Math.floor(Math.random()*2 + 2);
@@ -79,9 +122,10 @@
             speedX = -speedX;
         }
         var callback = this.getCallbackByType(type);
-        return app.attachClient(
+        var good = app.attachClient(
             goodClientBuilder(this.goodsFrame, type, x, 0, speedX, speedY, callback)
         );
+        this.state.goods[good.id] = good;
     }
 
     mixedClient.prototype.getCallbackByType = function(type) {
@@ -90,30 +134,36 @@
                 case GOOD_BULLET: {
                     var number = Math.floor(Math.random()*20 + 1);
                     this.addBulletNumber(number);
-                    this.showMessage('弹药' + number);
+                    this.showMessage('弹药+' + number, '#FFA07A');
                     break;
                 }
-                case GOOD_SPEED: {
-                    var number = Math.floor(Math.random()*200 + 1);
+                case GOOD_HEALTH: {
+                    var number = Math.floor(Math.random()*180 + 1) + 20;
                     this.updateBloodFill(number);
-                    this.showMessage('生命值 + ' + number);
+                    this.showMessage('生命值+' + number, '#3CB371');
                     break;
                 }
                 case GOOD_LIMITLESS: {
                     this.state.isLimitless = true;
                     var customEvent = new CustomEvent('count-down');
                     document.dispatchEvent(customEvent);
-                    this.showMessage('15 秒无限弹药');
+                    this.showMessage('15 秒无限弹药', '#FFA500');
                     setTimeout((function() {
                         this.state.isLimitless = false;
                     }).bind(this), 15000);
+                    break;
+                }
+                case GOOD_KILLALL: {
+                    this.killAllEnemies();
+                    this.showMessage('毁灭打击！', '#FF6347');
+                    break;
                 }
             }
         }).bind(this);
     };
 
-    mixedClient.prototype.showMessage = function (message) {
-        this.showFrame.flashText(message);
+    mixedClient.prototype.showMessage = function (message, color) {
+        this.showFrame.flashText(message, color);
     };
 
     mixedClient.prototype.updateKillNumber = function (number) {
@@ -132,6 +182,34 @@
             this.state.bulletNumber -= 1;
             this.elementBulletNumber.innerText = this.state.bulletNumber;
         }
+    };
+    
+    mixedClient.prototype.killAllEnemies = function () {
+        for (var id in this.state.enemies) {
+            this.updateKillNumber(1);
+            var enemyInfo = this.state.enemies[id].getInfo();
+            app.attachClient(
+                smokeClientBuilder(this.frame, enemyInfo[0], enemyInfo[1])
+            );
+            this.terminateFromState('enemies', id);
+        }
+    };
+
+    mixedClient.prototype.terminateFromState = function(key, id, isHitting) {
+        var entry = this.state[key][id];
+        entry.terminate(isHitting);
+        delete this.state[key][id];
+    };
+
+    mixedClient.prototype.terminate = function() {
+        for (var id in this.state.enemies) {
+            this.terminateFromState('enemies', id);
+        }
+
+        for (var id in this.state.goods) {
+            this.terminateFromState('goods', id);
+        }
+        app.detachClient(this.id);
     };
 
     window.MixedClient = mixedClient;

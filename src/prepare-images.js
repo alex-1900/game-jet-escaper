@@ -41,9 +41,11 @@ function prepareImages(images) {
     finalImages.boom_4 = Dom.imageSplit(boom, 403, 14, 77, 68, 0.5);
     finalImages.boom_5 = Dom.imageSplit(boom, 502, 18, 64, 62, 0.5);
 
-    finalImages.good_0 = Dom.imageSplit(images.img_good0, 0, 0, 36, 47, 0.7);
-    finalImages.good_1 = Dom.imageSplit(images.img_good1, 0, 0, 32, 32, 0.7);
-    finalImages.good_2 = Dom.imageSplit(images.img_good2, 0, 0, 36, 47, 0.7);
+    finalImages.good_0 = Dom.imageSplit(images.img_good0, 0, 0, 38, 48, 0.6);
+    finalImages.good_1 = Dom.imageSplit(images.img_good1, 0, 0, 53, 48, 0.6);
+    // finalImages.good_2 = Dom.imageSplit(images.img_good2, 0, 0, 36, 47, 0.7);
+    finalImages.good_2 = Dom.imageSplit(images.img_good2, 0, 0, 48, 48, 0.6);
+    finalImages.good_3 = Dom.imageSplit(images.img_good3, 0, 0, 48, 48, 0.6);
 
     finalImages.bg0 = images.img_bg_level_2;
     finalImages.bg1 = images.img_bg_level_3;

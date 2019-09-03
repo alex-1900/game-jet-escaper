@@ -6,9 +6,10 @@
         this.canvas.width = width;
         this.canvas.height = height;
         this.ctx = this.canvas.getContext('2d');
-        this.ctx.font = "20pt Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif";
+        this.ctx.font = "bold 20pt Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif";
         this.ctx.fillStyle = "#3CB371";
         this.ctx.textAlign = 'center';
+        this.ctx.textBaseline
         this.ctx.textBaseline = 'middle';
         if (tapHandler) {
             this.canvas.ontouchstart = tapHandler;
@@ -19,12 +20,17 @@
         this.ctx.drawImage(image, x, y);
     };
 
-    frame.prototype.flashText = function(text) {
+    frame.prototype.flashText = function(text, color) {
+        this.ctx.save();
         this.clear(0, 0, document.body.clientWidth, document.body.clientHeight);
+        if (color) {
+            this.ctx.fillStyle = color;
+        }
         this.ctx.fillText(text, document.body.clientWidth / 2, document.body.clientHeight / 3);
         setTimeout((function() {
             this.clear(0, 0, document.body.clientWidth, document.body.clientHeight);
-        }).bind(this), 1000);
+        }).bind(this), 1400);
+        this.ctx.restore();
     };
 
     frame.prototype.clear = function(x, y, w, h) {
