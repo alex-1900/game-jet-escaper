@@ -35,7 +35,6 @@
         img_boom: './resources/images/img_boom.png',
         img_bullet_size0: './resources/images/img_bullet_size0.png',
         img_bullet_size1: './resources/images/img_bullet_size1.png',
-        img_bullet_size2: './resources/images/img_bullet_size2.png',
         img_bg_level_2: './resources/images/img_bg_level_2.jpg',
         img_bg_level_3: './resources/images/img_bg_level_3.jpg',
         img_bg_level_4: './resources/images/img_bg_level_4.jpg',

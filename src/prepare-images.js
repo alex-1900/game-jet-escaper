@@ -20,18 +20,12 @@ function prepareImages(images) {
     // bullets
     var bullet_size0 = images.img_bullet_size0;
     finalImages.bullet0_0 = Dom.imageSplit(bullet_size0, 0, 0, 16, 16, proportion);
-    finalImages.bullet0_1 = Dom.imageSplit(bullet_size0, 16, 0, 16, 16, proportion);
+    // finalImages.bullet0_1 = Dom.imageSplit(bullet_size0, 16, 0, 16, 16, proportion);
 
     var bullet_size1 = images.img_bullet_size1;
-    finalImages.bullet1_0 = Dom.imageSplit(bullet_size1, 54, 10, 22, 22, proportion);
-    finalImages.bullet1_1 = Dom.imageSplit(bullet_size1, 0, 0, 21, 58, proportion);
+    // finalImages.bullet1_0 = Dom.imageSplit(bullet_size1, 54, 10, 22, 22, proportion);
+    // finalImages.bullet1_1 = Dom.imageSplit(bullet_size1, 0, 0, 21, 58, proportion);
     finalImages.bullet1_2 = Dom.imageSplit(bullet_size1, 25, 10, 18, 32, proportion);
-
-    var bullet_size2 = images.img_bullet_size2;
-    finalImages.bullet2_0 = Dom.imageSplit(bullet_size2, 0, 0, 16, 16, proportion);
-    finalImages.bullet2_1 = Dom.imageSplit(bullet_size2, 16, 0, 16, 16, proportion);
-
-    finalImages.bg_ui0 = Dom.imageSplit(images.img_bg_level_2, 290, 330, 100, 100, proportion);
 
     var boom = images.img_boom;
     finalImages.boom_0 = Dom.imageSplit(boom, 32, 30, 45, 38, 0.5);

@@ -90,7 +90,7 @@
                     this.mixedClient.updateKillNumber(1);
                     if (this.state.killForGood == 8) {
                         this.state.killForGood = 0;
-                        this.makeGood();
+                        this.mixedClient.makeGood();
                     }
                     this.state.killForGood++;
                     break;
