@@ -1,3 +1,5 @@
+console.info('Jet Escaper Github Page:\r\nhttps://github.com/speed-sonic/game-jet-escaper');
+console.info('Author:\r\nAlex(omytty.alex@gmail.com)');
 (function () {
     var elementCanvasContainer = document.getElementById('domCanvasContainer');
     var elementInitFrame = document.getElementById('initFrame');
