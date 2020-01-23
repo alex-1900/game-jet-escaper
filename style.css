@@ -266,10 +266,10 @@ body, .main, .init-frame, .switch-frame, .main .canvases {
     position: relative;
     top:25px;
     left: 25px;
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border-radius: 100%;
-    border: 3px solid rgb(240, 107, 107);
+    border: 7px solid rgb(240, 107, 107);
     background: url(./resources/images/img_bullet_ui.png) no-repeat;
     background-size: 80% 80%;
     background-repeat:no-repeat;
@@ -420,6 +420,7 @@ body, .main, .init-frame, .switch-frame, .main .canvases {
     height: 100%;
     background-color: rgb(8, 20, 41);
     overflow-y: auto;
+    font-size: 1.3rem;
 }
 .introduce p {
     text-indent: 2rem;
@@ -429,15 +430,20 @@ body, .main, .init-frame, .switch-frame, .main .canvases {
     color: rgb(182, 222, 255);
     line-height: 35px;
 }
+.introduce p font {
+    font-size: 1.3rem;
+}
 .introduce p img {
     display: inline-block;
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     line-height: 35px;
 }
 .introduce p span {
+    font-size: 1.2rem;
     float: left;
     width: 50%;
+    line-height: 35px;
 }
 .introduce .wklmxd {
     margin-top: 2rem;

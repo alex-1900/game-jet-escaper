@@ -89,8 +89,9 @@
         event.preventDefault();
         if (
             this.state.shotKey == false &&
-            (this.mixedClient.state.bulletNumber != 0 || this.mixedClient.state.isLimitless)
+            (this.mixedClient.state.bulletNumber != 0 || this.mixedClient.isLimitless())
         ) {
+            event.target.style.borderColor = '#00FF7F';
             this.shot();
             this.setStates({
                 shotKey: true,
@@ -99,19 +100,33 @@
             setTimeout((function() {this.setStates({
                 shotKey: false,
             })}).bind(this), 400);
+        } else if (!this.mixedClient.isLimitless() && this.mixedClient.state.bulletNumber === 0) {
+            this.showIA();
         }
     };
 
+    // 弹药不足
+    controller.prototype.showIA = function() {
+        this.mixedClient.showMessage('弹药不足', '#FF6347');
+    };
+
     controller.prototype.blazedShoot = function() {
+        if (!this.mixedClient.isLimitless() && 0 === this.mixedClient.state.bulletNumber) {
+            this.showIA();
+        }
+
         if (this.mixedClient.state.bulletNumber != 0 ||
             this.mixedClient.state.isLimitless) {
-            this.shot();
+            this.shot()
         } else {
             this.shotEnd();
         }
     };
 
-    controller.prototype.shotEnd = function() {
+    controller.prototype.shotEnd = function(event) {
+        if (event) {
+            event.target.style.borderColor = 'rgb(240, 107, 107)';
+        }
         this.setState('isShotting', false);
     };
 

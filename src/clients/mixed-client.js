@@ -107,11 +107,11 @@
     mixedClient.prototype.makeGood = function() {
         var randomNumber = Math.floor(Math.random()*100);
         var type = GOOD_KILLALL;
-        if (randomNumber >= 0 && randomNumber < 30) {
+        if (randomNumber < 30) {
             type = GOOD_HEALTH;
-        } else if (randomNumber >= 30 && randomNumber < 60) {
+        } else if (randomNumber < 60) {
             type = GOOD_BULLET;
-        } else if (randomNumber >= 60 && randomNumber < 75) {
+        } else if (randomNumber < 75) {
             type = this.state.isLimitless ? GOOD_HEALTH : GOOD_LIMITLESS;
         }
 
@@ -149,6 +149,7 @@
                     document.dispatchEvent(customEvent);
                     this.showMessage('15 秒无限弹药', '#FFA500');
                     setTimeout((function() {
+                        this.showMessage('无限弹药模式结束', '#FFA500');
                         this.state.isLimitless = false;
                     }).bind(this), 15000);
                     break;
@@ -199,6 +200,10 @@
         var entry = this.state[key][id];
         entry.terminate(isHitting);
         delete this.state[key][id];
+    };
+
+    mixedClient.prototype.isLimitless = function() {
+        return this.state.isLimitless;
     };
 
     mixedClient.prototype.terminate = function() {

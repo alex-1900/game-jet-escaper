@@ -13,6 +13,7 @@
     var elementMain = document.getElementById('main');
     var elementPanel = document.getElementById('panel');
     var elementIntroduce = document.getElementById('introduce');
+    var elementIntroText = document.getElementById('intro-text');
     var elementWklmxd = document.getElementById('wklmxd');
 
     var elementBloodFill = document.getElementById('bloodFill');
@@ -152,7 +153,6 @@
         var promise = imageLoader.load();
         promise.then(function (_images) {
             // 加载完毕
-            // requestFullScreen();
             var images = prepareImages(_images);
             Dom.styleRender(elementLoader, {display: 'none'});
             Dom.styleRender(elementStartGame, {display: 'block'});
@@ -208,11 +208,42 @@
         });
     });
 
+    var introText = '驾驶你的飞机逃亡吧！在这场空前的浩劫中，你唯一拥有的，\
+    就是弹药仓里的 20 颗子弹。在旅途中，你将掠过云霄，穿越沙漠，纵身火海，俯瞰荒芜。\
+    亲爱的冒险者，使用手中的子弹痛击拦截你的敌机！同时也不要忘记留意子弹的数量和状态，\
+    并注意拾取不时出现的补给包，这是你赖以生存的宝贵资源。\
+    方向手柄在你的左侧，开火按钮在右侧，祝你好运~';
+
+    var introHtml = '驾驶你的飞机逃亡吧！在这场空前的浩劫中，你唯一拥有的，\
+    就是弹药仓里的 20 颗子弹。在旅途中，你将掠过云霄，穿越沙漠，纵身火海，俯瞰荒芜。\
+    亲爱的冒险者，使用手中的子弹痛击拦截你的敌机！同时也不要忘记留意子弹的数量和状态，\
+    并注意拾取不时出现的<font color="#00FFFF">补给包</font>，这是你赖以生存的宝贵资源。\
+    <font color="#00FFFF">方向手柄</font>在你的左侧，<font color="#00FFFF">开火按钮</font>在右侧，祝你好运~';
+
+    function showIntroText(num) {
+        clearInterval(num);
+        elementIntroText.innerHTML = introHtml;
+        Dom.styleRender(elementWklmxd, {display: 'block'});
+    }
     // 点击开始游戏按钮
     elementStartGame.onclick = function (event) {
+        requestFullScreen();
         // 显示游戏介绍
         Dom.styleRender(elementLoader, {display: 'none'});
         Dom.styleRender(elementIntroduce, {display: 'block'});
+
+        var indroArray = introText.split('');
+        var swap = 0;
+        var num = setInterval(function() {
+            elementIntroText.innerHTML += indroArray[swap++];
+            if (swap == indroArray.length) {
+                showIntroText(num);
+            }
+        }, 30);
+
+        elementIntroText.onclick = function(event) {
+            showIntroText(num);
+        };
     };
 
     elementWklmxd.onclick = function() {

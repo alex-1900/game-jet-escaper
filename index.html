@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
     <meta content="telephone=no,email=no" name="format-detection" />
     <meta name="renderer" content="webkit" />
@@ -46,18 +47,16 @@
                 </div>
             </div>
             <button class="confirm-btn" type="button" id="startGame">开始游戏</button>
+            <p class="notice">version 1.0.2</p>
         </div>
     </div>
 
     <div class="introduce" style="display: none" id="introduce">
-        <p>
-            9102 年，战争席卷全球，驾驶你的飞机逃亡吧！在这场空前的浩劫中，你唯一拥有的，
-            就是弹药仓里的 20 颗子弹。你将掠过云霄，穿越沙漠，纵身火海，俯瞰荒芜。
-            所以，可怜的冒险者，请用手中的子弹痛击拦截你的敌机！请慎重发射宝贵的弹药，
-            留意子弹的数量和状态，并注意拾取不时出现的补给包，这是你赖以生存的宝贵资源。
-            方向手柄在你的左侧，开火按钮在右侧，祝你好运。
+        <p id="intro-text">
+            <!-- introText -->
         </p>
-        <p style="padding-bottom: 1.5rem; float: left;">
+        <p style="color: #00FFFF;">物品清单：</p>
+        <p style="padding-bottom: 1.5rem; padding-top:0; float: left;">
             <span>
                 <img src="./resources/images/img_good0.png" alt=""> 弹药
             </span>
@@ -72,7 +71,7 @@
             </span>
         </p>
         <div class="wklmxd">
-            <button id="wklmxd" type="button">我知道了</button>
+            <button id="wklmxd" style="display: none;" type="button">我知道了</button>
         </div>
     </div>
 
