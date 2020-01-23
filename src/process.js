@@ -46,7 +46,7 @@
         img_plane_ui3: './resources/images/img_plane_ui3.png',
         img_good0: './resources/images/img_good0.png',
         img_good1: './resources/images/img_good1.png',
-        img_good2: './resources/images/img_good2.png',
+        img_good4: './resources/images/img_good4.png',
         img_good3: './resources/images/img_good3.png',
     };
     var imageLoader = new ImageLoader(neededImages);
