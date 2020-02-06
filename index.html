@@ -51,7 +51,7 @@
                 </div>
             </div>
             <button class="confirm-btn" type="button" id="startGame">开始游戏</button>
-            <p class="notice">version 1.0.2</p>
+            <p class="notice">version 1.0.3</p>
         </div>
     </div>
 
@@ -139,10 +139,13 @@
     </div>
 
     <div class="show-record" style="display: none" id="showRecord">
-        <div class="record-board" id="recordBoard">
-            <h2>Aircraft Battle</h2>
+        <div class="record-board p-20" id="recordBoard">
+            <h2>末日逃亡</h2>
             <span class="record-item">逃亡里程 <span id="recordDistance">0</span> 英里</span>
             <span class="record-item">击落敌机 <span id="recordKillNumber">0</span> 架</span>
+        </div>
+        <div class="record-board" id="record-canvas">
+            <canvas id="record-image-cvs" width="200" height="200"></canvas>
         </div>
         <div class="btns">
             <p>长按战绩卡下载图片（qq无效）</p>
@@ -155,7 +158,6 @@
             <!-- Prepare canvases -->
         </div>
     </article>
-    <a href="" id="aaa" download="record-card.png"></a>
 
     <script src="./src/prepare-images.js"></script>
     <script src="./src/prepare-clients.js"></script>

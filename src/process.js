@@ -111,7 +111,7 @@ console.info('Author:\r\nAlex(omytty.alex@gmail.com)');
 
                 Dom.styleRender(elementController, {display: 'none'});
                 Dom.styleRender(elementPanel, {display: 'none'});
-                Dom.styleRender(elementShowRecord, {display: 'block'});
+                showRecord();
                 elementRecordDistance.innerText = detail.distance;
                 elementRecordKillNumber.innerText = detail.killNumber;
             });
@@ -199,16 +199,25 @@ console.info('Author:\r\nAlex(omytty.alex@gmail.com)');
         };
     }
 
-    elementReplay.onclick = function() {replayGame()};
-
-    longTouch(elementRecordBoard, function(event) {
+    function showRecord() {
+        Dom.styleRender(elementShowRecord, {display: 'block'});
         html2canvas(elementRecordBoard).then(function(canvas) {
-            var a = document.getElementById('aaa');
-            a.href = canvas.toDataURL("image/png").replace("image/jpeg", "image/octet-stream");
-            a.download = 'record-card.png';
-            a.click();
+            var recordImageCvs = document.getElementById("record-image-cvs");
+            var ctx = recordImageCvs.getContext('2d');
+            ctx.drawImage(canvas, 0, 0, 200, 200);
+
+            longTouch(recordImageCvs, function(event) {
+                event.preventDefault();
+                var swapLink = document.createElement('a');
+                swapLink.href = canvas.toDataURL("image/png").replace("image/jpeg", "image/octet-stream");
+                swapLink.setAttribute('download', 'JetEscaper_Record.png')
+                swapLink.click();
+            });
         });
-    });
+        elementRecordBoard.style.display = 'none';
+    }
+
+    elementReplay.onclick = function() {replayGame()};
 
     var introText = '驾驶你的飞机逃亡吧！在这场空前的浩劫中，你唯一拥有的，\
     就是弹药仓里的 20 颗子弹。在旅途中，你将掠过云霄，穿越沙漠，纵身火海，俯瞰荒芜。\
@@ -229,7 +238,7 @@ console.info('Author:\r\nAlex(omytty.alex@gmail.com)');
     }
     // 点击开始游戏按钮
     elementStartGame.onclick = function (event) {
-        requestFullScreen();
+        // requestFullScreen();
         // 显示游戏介绍
         Dom.styleRender(elementLoader, {display: 'none'});
         Dom.styleRender(elementIntroduce, {display: 'block'});
