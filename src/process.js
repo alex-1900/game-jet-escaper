@@ -111,9 +111,9 @@ console.info('Author:\r\nAlex(omytty.alex@gmail.com)');
 
                 Dom.styleRender(elementController, {display: 'none'});
                 Dom.styleRender(elementPanel, {display: 'none'});
-                showRecord();
                 elementRecordDistance.innerText = detail.distance;
                 elementRecordKillNumber.innerText = detail.killNumber;
+                showRecord();
             });
 
             app.start();
